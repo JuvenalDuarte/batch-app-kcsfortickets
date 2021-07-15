@@ -16,7 +16,7 @@
         "instanceProperties": {
           "profile": "",
           "properties": {
-            "dockerImage": "kcsfortickets/updatekcsdbtickets:1.0.0",
+            "dockerImage": "updatekcsfortickets/updatekcsdbtickets:1.0.0",
             "instanceType": "c1.medium"
           },
           "environments": {
@@ -35,7 +35,7 @@
       "gitPath": "/",
       "instanceType": "c1.medium",
       "gitDockerfileName": "Dockerfile", 
-      "gitRepoUrl": "https://github.com/JuvenalDuarte/batch-app-knowledgebasetdn"
+      "gitRepoUrl": "https://github.com/JuvenalDuarte/batch-app-kcsfortickets"
     }
   ]
 }
