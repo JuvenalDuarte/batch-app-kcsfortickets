@@ -1,0 +1,41 @@
+{
+  "batch": {
+    "processes": [
+      {
+        "name": "updatekcsdbtickets",
+        "algorithmName": "main",
+        "namespace": "",
+        "algorithmTitle": {
+          "pt-br": "Update KCSDB Tickets",
+          "en-US": "Update KCSDB Tickets"
+        },
+        "algorithmDescription": {
+          "pt-br": "Update KCSDB Tickets",
+          "en-US": "Update KCSDB Tickets"
+        },
+        "instanceProperties": {
+          "profile": "",
+          "properties": {
+            "dockerImage": "kcsfortickets/updatekcsdbtickets:1.0.0",
+            "instanceType": "c1.medium"
+          },
+          "environments": {
+            "ENV": "PROD",
+            "LOCALSCHEDULER": "True"
+          }
+        }
+      }
+    ]
+  },
+  "docker": [
+    {
+      "dockerName": "updatekcsdbtickets",
+      "dockerTag": "1.0.0",
+      "gitBranch": "main",
+      "gitPath": "/",
+      "instanceType": "c1.medium",
+      "gitDockerfileName": "Dockerfile", 
+      "gitRepoUrl": "https://github.com/JuvenalDuarte/batch-app-knowledgebasetdn"
+    }
+  ]
+}
