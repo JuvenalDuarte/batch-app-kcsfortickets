@@ -53,6 +53,8 @@ def data_ingestion(stag, daystopresent):
         recent_solutions = kcs_df[kcs_df["updated_at"] > threshold_date].copy()
 
         logger.info(f'Using {len(recent_solutions)} articles out of {len(kcs_df)} in total.')
+    else:
+        recent_solutions = kcs_df.copy()
 
     # releasing memory from the full DF
     del kcs_df
