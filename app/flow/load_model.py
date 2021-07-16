@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 luigi.auto_namespace(scope=__name__)
 
 class LoadModel(Task):
-    model_name = luigi.Parameter()
-    model_version = luigi.Parameter()
+    #model_name = luigi.Parameter()
+    #model_version = luigi.Parameter()
     
     #target_type = PickleTarget
     target_type = PytorchTarget
