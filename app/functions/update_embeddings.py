@@ -6,21 +6,24 @@ import pickle
 import requests
 from pycarol import Carol, Storage
 import gc
+import ast
 
 logger = logging.getLogger(__name__)
 
 def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cache=True, specificity_percent=0.3):
 
-    df["id"] = df["source_id"]
-    cols_pk = ["id"]
-    cols_search = ["title", "summary", "situacao_requisicao", "labels"]
+    # Filling NAs with blank
+    logger.info('Replacing NaN with \"\" to avoid crashes on fulfillment.')
+    df.fillna('', inplace=True)
 
-    # Load Sentence model
-    logger.info(f'Dropping records where source_id is unavailable.')
-    df.dropna(axis=0, subset=cols_pk, inplace=True)
+    try:
+        cols_search_l = [c.lstrip().rstrip() for c in cols_search.split(",")]
+    except Exception as e:
+        logger.error(f'Unable to parse setting kb_search_fields:{cols_search}.')
+        raise f"Stack: {e}"
 
     dfs = []
-    for cs in cols_search:
+    for cs in cols_search_l:
 
         logger.info(f'Preparing \"{cs}\" for search.')
 
@@ -34,14 +37,20 @@ def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cach
         # Adding to the list of "searcheable" data 
         dfs.append(dft)
 
-    for cs in cols_keywords:
+    try:
+        if cols_keywords:
+            cols_keywords_l = [c.lstrip().rstrip() for c in cols_keywords.split(",")]
+        else:
+            cols_keywords_l = []
+    except Exception as e:
+        logger.error(f'Unable to parse setting kb_keywords_fields:{cols_keywords}.')
+        raise f"Stack: {e}"
+
+    for cs in cols_keywords_l:
         logger.info(f'Preparing \"{cs}\" for search.')
 
         # Get the search column all other expected to be retrieved
         dft = df.copy()
-
-        # Filling NAs with blank
-        dft[cs].fillna('', inplace=True)
 
         # Parsing tags
         dft['tags'] = dft[cs].apply(get_tags)
@@ -71,6 +80,7 @@ def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cach
         # Adding to the list of "searcheable" data 
         dfs.append(dft)
 
+
     # Concatenating all searcheable data into a single dataset
     logger.info(f'Packing all searchable fields.')
     df = pd.concat(dfs, ignore_index=True)
@@ -92,9 +102,6 @@ def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cach
     logger.info('Translating sentences to embeddings')
     # Translate the senteces to the corresponding embeddings
     df["sentence_embedding"] = df["sentence"].apply(lambda x: sent2embd[x])
-
-    logger.info('Replacing NaN with \"\" to avoid crashes on fulfillment.')
-    df.fillna("", inplace=True)
 
     ### Save objects in Storage
     if app_name:

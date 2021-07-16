@@ -28,6 +28,8 @@ class UpdateEmbeddings(Task):
 
         return update_embeddings(
             df=documents_df,
+            cols_search=self.search_fields,
+            cols_keywords=self.keyword_fields,
             app_name=self.app_name,
             url=self.refresh_url,
             model=model,
