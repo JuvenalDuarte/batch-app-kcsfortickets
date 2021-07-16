@@ -19,6 +19,6 @@ class LoadModel(Task):
 
     def easy_run(self, inputs):
         logger.info(f'Loading embedding model.')
-        model = SentenceTransformer('LaBSE')
+        model = SentenceTransformer('distiluse-base-multilingual-cased-v2')
 
         return model
