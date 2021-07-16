@@ -28,7 +28,7 @@ def data_ingestion(stag, daystopresent):
     stag_list = stag.split("/")
     if len(stag_list) == 4:
         org, env, conn, stag = stag_list
-    if len(stag_list) == 3:
+    elif len(stag_list) == 3:
         env, conn, stag = stag_list
         org = "totvs"
     elif len(stag_list) == 2:
@@ -36,7 +36,7 @@ def data_ingestion(stag, daystopresent):
         org = "totvs"
         env = "sentencesimilarity"
     else:
-        raise "Unable to parse \"in_staging\" setting. Valid options are: 1. env/connector/staging; 2. connector/staging."
+        raise "Unable to parse \"in_staging\" setting. Valid options are: 1. org/env/conn/stag; 2. env/conn/stag; 3. conn/stag."
 
     logger.info(f'Retrieving data from {org}/{env}/{conn}/{stag}.')
     kcs_df = fetchFromCarol(org=org, env=env, conn=conn, stag=stag)
