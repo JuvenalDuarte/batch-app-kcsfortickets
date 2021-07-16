@@ -100,7 +100,7 @@ params = dict(
     version=os.environ.get('CAROLAPPVERSION', 'dev'),
     datetime = now_str,
 
-    staging_documents = staging_name,
+    staging_name = staging_name,
     search_fields = search_fields,
     keyword_fields = keyword_fields,
 
