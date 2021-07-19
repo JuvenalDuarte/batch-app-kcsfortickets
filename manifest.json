@@ -17,7 +17,7 @@
           "profile": "",
           "properties": {
             "dockerImage": "updatekcsfortickets/updatekcsdbtickets:1.0.0",
-            "instanceType": "c1.medium"
+            "instanceType": "c1.large"
           },
           "environments": {
             "ENV": "PROD",

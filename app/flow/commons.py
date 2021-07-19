@@ -77,6 +77,9 @@ daystopresent = _settings.get('knowledgebase_daystopresent')
 #================================================================================
 # Optimization parameters
 #================================================================================
+
+# Allows the process to reuse embeddings calculated on previous execution, leading 
+# to faster executions. If false the full database will be reprocessed.
 embeddings_cache = _settings.get('embeddings_cache')
 
 @Task.event_handler(luigi.Event.FAILURE)
