@@ -82,6 +82,19 @@ daystopresent = _settings.get('knowledgebase_daystopresent')
 # to faster executions. If false the full database will be reprocessed.
 embeddings_cache = _settings.get('embeddings_cache')
 
+#================================================================================
+# Model options
+#================================================================================
+
+# If this parameter is filled the app will look for a file with given name
+# on its local storage.
+model_storage_file = _settings.get('model_storage_file')
+
+# If model_storage_file is empty the app will look for a model with the given 
+# name on the sentencetransformers online store.
+model_sentencetransformers = _settings.get('model_sentencetransformers')
+
+
 @Task.event_handler(luigi.Event.FAILURE)
 def mourn_failure(task, exception):
     """Will be called directly after a failed execution
@@ -110,6 +123,9 @@ params = dict(
     app_name=app_name,
     refresh_url = refresh_url,
     daystopresent = daystopresent,
+
+    model_storage_file = model_storage_file,
+    model_sentencetransformers = model_sentencetransformers,
 
     cache = embeddings_cache
 )
