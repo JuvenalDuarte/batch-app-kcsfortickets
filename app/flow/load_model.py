@@ -35,6 +35,6 @@ class LoadModel(Task):
             model = storage.load(self.model_storage_file, format='pickle', cache=False)
         else:
             logger.info(f'Loading embedding model from Sentence Transformers lib. Model: {self.model_sentencetransformers}.')
-            model = SentenceTransformer('distiluse-base-multilingual-cased-v2')
+            model = SentenceTransformer(self.model_sentencetransformers)
 
         return model
