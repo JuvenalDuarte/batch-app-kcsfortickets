@@ -33,6 +33,7 @@ class LoadModel(Task):
             login = Carol()
             storage = Storage(login)
             model = storage.load(self.model_storage_file, format='pickle', cache=False)
+            if gpu: model.device('gpu')
         else:
             logger.info(f'Loading embedding model from Sentence Transformers lib. Model: {self.model_sentencetransformers}.')
             model = SentenceTransformer(self.model_sentencetransformers)
