@@ -6,11 +6,39 @@ import pickle
 import requests
 from pycarol import Carol, Storage
 import gc
-import ast
+import re
+import ftfy
+from unidecode import unidecode
 
 logger = logging.getLogger(__name__)
 
-def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cache=True, specificity_percent=0.3):
+def transformSentences(m, custom_stopwords, preproc_mode):
+    # Ensure the parameter type as string
+    mproc0 = str(m)
+    
+    # Set all messages to a standard encoding
+    mproc1 = ftfy.fix_encoding(mproc0)
+    
+    # Replaces accentuation from chars. Ex.: "férias" becomes "ferias" 
+    mproc2 = unidecode(mproc1)
+    
+    if preproc_mode == "advanced":
+        # Removes special chars from the sentence. Ex.: 
+        #  - before: "MP - SIGAEST - MATA330/MATA331 - HELP CTGNOCAD"
+        #  - after:  "MP   SIGAEST   MATA330 MATA331   HELP CTGNOCAD"
+        mproc3 = re.sub('[^0-9a-zA-Z]', " ", mproc2)
+        
+        # Sets capital to lower case maintaining full upper case tokens and remove portuguese stop words.
+        #  - before: "MP   MEU RH   Horario ou Data registrado errado em solicitacoes do MEU RH"
+        #  - after:  "MP MEU RH horario data registrado errado solicitacoes MEU RH"
+        mproc4 = " ".join([t.lower() for t in mproc3.split() if t not in custom_stopwords])
+        
+        return mproc4
+
+    else:
+        return mproc2
+
+def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cache=True, specificity_percent=0.3, preproc="Basic"):
 
     # Filling NAs with blank
     logger.info('Replacing NaN with \"\" to avoid crashes on fulfillment.')
@@ -80,11 +108,19 @@ def update_embeddings(df, cols_search, cols_keywords, app_name, url, model, cach
         # Adding to the list of "searcheable" data 
         dfs.append(dft)
 
-
     # Concatenating all searcheable data into a single dataset
     logger.info(f'Packing all searchable fields.')
     df = pd.concat(dfs, ignore_index=True)
 
+    # Applying preprocessing
+    logger.info(f'Applying preproc mode: {preproc}.')
+    # Reading stopwords to be removed
+    if preproc == "Advanced":
+        with open('/app/cfg/stopwords.txt') as f:
+            custom_stopwords = f.read().splitlines()
+    else:
+        custom_stopwords = []
+    df["sentence"] = df["sentence"].apply(lambda x: transformSentences(x, custom_stopwords, preproc_mode=preproc))
     
     logger.info(f'Cleaning variables.')
     # releasing memory from the full DF

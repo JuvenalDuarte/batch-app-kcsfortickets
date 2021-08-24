@@ -54,6 +54,15 @@ search_fields = _settings.get('kb_search_fields')
 #       - ["attr1", "attr2"]: allows a list of fields to be used for keyword search
 keyword_fields = _settings.get('kb_keywords_fields')
 
+# Defines if search fields should receive any kind of transformation before
+# flowing to the database. In some cases preprocessing steps may increase model
+# accuracy and lead the more relevant results.
+# Usage:
+#       - "Basic": only fix encoding problems
+#       - "Advanced": fix encodings, remove special characters, set lowercase 
+#                     and remove stopwords.
+preproc_mode = _settings.get('preproc_mode')
+
 #================================================================================
 # Settings about where and how the knowledge base will be published
 #================================================================================
@@ -119,7 +128,8 @@ params = dict(
     staging_name = staging_name,
     search_fields = search_fields,
     keyword_fields = keyword_fields,
-
+    preproc_mode = preproc_mode,
+    
     app_name=app_name,
     refresh_url = refresh_url,
     daystopresent = daystopresent,

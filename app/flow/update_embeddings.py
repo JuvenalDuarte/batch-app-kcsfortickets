@@ -20,6 +20,7 @@ class UpdateEmbeddings(Task):
     keyword_fields = luigi.Parameter()
     refresh_url = luigi.Parameter()
     cache = luigi.BoolParameter()
+    preproc_mode = luigi.Parameter()
 
     def easy_run(self, inputs):
 
@@ -33,5 +34,6 @@ class UpdateEmbeddings(Task):
             app_name=self.app_name,
             url=self.refresh_url,
             model=model,
-            cache=self.cache
+            cache=self.cache,
+            preproc=self.preproc_mode
         )
