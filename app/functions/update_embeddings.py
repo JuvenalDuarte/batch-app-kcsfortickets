@@ -22,7 +22,7 @@ def transformSentences(m, custom_stopwords, preproc_mode):
     # Replaces accentuation from chars. Ex.: "férias" becomes "ferias" 
     mproc2 = unidecode(mproc1)
     
-    if preproc_mode == "advanced":
+    if preproc_mode.lower() == "advanced":
         # Removes special chars from the sentence. Ex.: 
         #  - before: "MP - SIGAEST - MATA330/MATA331 - HELP CTGNOCAD"
         #  - after:  "MP   SIGAEST   MATA330 MATA331   HELP CTGNOCAD"
