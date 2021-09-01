@@ -8,6 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 luigi.auto_namespace(scope=__name__)
 class IngestDocuments(Task):
+    datetime = luigi.Parameter() 
     staging_name = luigi.Parameter() 
     daystopresent = luigi.IntParameter()
 

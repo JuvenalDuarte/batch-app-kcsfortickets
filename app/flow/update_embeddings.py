@@ -14,7 +14,7 @@ luigi.auto_namespace(scope=__name__)
     load_model.LoadModel
 )
 class UpdateEmbeddings(Task):
-
+    datetime = luigi.Parameter() 
     app_name = luigi.Parameter()
     search_fields = luigi.Parameter()
     keyword_fields = luigi.Parameter()
