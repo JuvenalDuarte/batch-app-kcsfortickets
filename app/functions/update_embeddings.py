@@ -22,18 +22,22 @@ def transformSentences(m, custom_stopwords, preproc_mode):
     # Replaces accentuation from chars. Ex.: "férias" becomes "ferias" 
     mproc2 = unidecode(mproc1)
     
-    if preproc_mode.lower() == "advanced":
+    if preproc_mode.lower() in ["advanced", "stopwords"]:
         # Removes special chars from the sentence. Ex.: 
         #  - before: "MP - SIGAEST - MATA330/MATA331 - HELP CTGNOCAD"
         #  - after:  "MP   SIGAEST   MATA330 MATA331   HELP CTGNOCAD"
         mproc3 = re.sub('[^0-9a-zA-Z]', " ", mproc2)
+
+        if preproc_mode.lower() in ["stopwords"]:
         
-        # Sets capital to lower case maintaining full upper case tokens and remove portuguese stop words.
-        #  - before: "MP   MEU RH   Horario ou Data registrado errado em solicitacoes do MEU RH"
-        #  - after:  "MP MEU RH horario data registrado errado solicitacoes MEU RH"
-        mproc4 = " ".join([t.lower() for t in mproc3.split() if t not in custom_stopwords])
+            # Sets capital to lower case maintaining full upper case tokens and remove portuguese stop words.
+            #  - before: "MP   MEU RH   Horario ou Data registrado errado em solicitacoes do MEU RH"
+            #  - after:  "MP MEU RH horario data registrado errado solicitacoes MEU RH"
+            mproc4 = " ".join([t.lower() for t in mproc3.split() if t not in custom_stopwords])
         
-        return mproc4
+            return mproc4
+        else:
+            return mproc3
 
     else:
         return mproc2
